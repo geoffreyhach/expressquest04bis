@@ -53,8 +53,23 @@ const postUser = (req, res) => {
 };
 
 const getUsers = (req, res) => {
+    let initialSql = "select * from users";
+    let sqlValues = [];
+
+    if (req.query.language)
+        sqlValues.push({ column: "language", value: req.query.language });
+    if (req.query.city)
+        sqlValues.push({ column: "city", value: req.query.city });
+
     database
-        .query("select * from users")
+        .query(
+            sqlValues.reduce(
+                (sql, { column }, index) =>
+                    `${sql} ${index === 0 ? "where" : "and"} ${column} = ?`,
+                initialSql
+            ),
+            sqlValues.map(({ value }) => value)
+        )
         .then(([users]) => {
             res.json(users);
         })

@@ -54,9 +54,23 @@ const postMovie = (req, res) => {
             res.status(500).send("error saving the movie");
         });
 };
+
 const getMovies = (req, res) => {
+    let sql = "select * from movies";
+    const sqlValues = [];
+
+    if (req.query.color) {
+        sql += " where color = ?";
+        sqlValues.push(req.query.color);
+    }
+
+    if (req.query.duration) {
+        sql += " where duration < ?";
+        sqlValues.push(req.query.duration);
+    }
+
     database
-        .query("select * from movies")
+        .query(sql, sqlValues)
         .then(([movies]) => {
             res.json(movies);
         })
