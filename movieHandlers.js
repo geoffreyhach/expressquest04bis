@@ -51,7 +51,7 @@ const postMovie = (req, res) => {
         })
         .catch((err) => {
             console.log(err);
-            res.status(500).send("error saving the movie");
+            res.sendStatus(500).send("error saving the movie");
         });
 };
 
