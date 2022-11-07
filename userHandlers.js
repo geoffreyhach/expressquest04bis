@@ -1,5 +1,25 @@
 const database = require("./database");
 
+const putUser = (req, res) => {
+    const id = parseInt(req.params.id);
+    const { firstname, lastname, email, city, language } = req.body;
+
+    database
+        .query(
+            "UPDATE users SET firstname = ?, lastname = ?, email = ?, city = ?, language = ? WHERE id = ?",
+            [firstname, lastname, email, city, language, id]
+        )
+        .then(([result]) => {
+            if (result.affectedRows === 0) {
+                res.status(404).send("not found");
+            } else res.sendStatus(204);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.sendStatus(500).send("error updating the user");
+        });
+};
+
 const postUser = (req, res) => {
     const { firstname, lastname, email, city, language } = req.body;
 
@@ -48,4 +68,5 @@ module.exports = {
     getUsers,
     getUserById,
     postUser,
+    putUser,
 };

@@ -18,12 +18,16 @@ app.get("/api/movies/:id", movieHandlers.getMovieById);
 
 app.post("/api/movies", movieHandlers.postMovie);
 
-const { getUsers, getUserById, postUser } = require("./userHandlers");
+app.put("/api/movies/:id", movieHandlers.putMovie);
+
+const { getUsers, getUserById, postUser, putUser } = require("./userHandlers");
 
 app.get("/api/users", getUsers);
 app.get("/api/users/:id", getUserById);
 
 app.post("/api/users", postUser);
+
+app.put("/api/users/:id", putUser);
 
 app.listen(port, (err) => {
     if (err) {

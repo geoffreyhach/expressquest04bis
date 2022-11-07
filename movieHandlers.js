@@ -1,5 +1,27 @@
 const database = require("./database");
 
+const putMovie = (req, res) => {
+    const id = parseInt(req.params.id);
+    const { title, director, year, color, duration } = req.body;
+
+    database
+        .query(
+            "UPDATE movies SET title = ?, director = ?, year = ?, color = ?, duration = ? where id = ?",
+            [title, director, year, color, duration, id]
+        )
+        .then(([result]) => {
+            if (result.affectedRows === 0) {
+                res.status(404).send("Not Found");
+            } else {
+                res.sendStatus(204).send("good");
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            res.sendStatus(500);
+        });
+};
+
 const postMovie = (req, res) => {
     const { title, director, year, color, duration } = req.body;
 
@@ -50,4 +72,5 @@ module.exports = {
     getMovies,
     getMovieById,
     postMovie,
+    putMovie,
 };
